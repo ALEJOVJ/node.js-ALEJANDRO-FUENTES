@@ -1,0 +1,14 @@
+inicar app
+node app.js
+
+nmp install express
+
+git log --oneline
+
+git checkout "nombre de la rama"
+
+crear ramas
+
+git branch nombre de la rama , para trabajar dentro de un commit y se crea una rama para trabajar en ese commit con esa rama
+
+
