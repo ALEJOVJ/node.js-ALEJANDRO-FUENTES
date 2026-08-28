@@ -4,13 +4,21 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node --watch app.js"
   },
   "keywords": [],
-  "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "dotenv": "^17.4.2",
     "express": "^5.2.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ALEJOVJ/node.js-ALEJANDRO-FUENTES.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ALEJOVJ/node.js-ALEJANDRO-FUENTES/issues"
+  },
+  "homepage": "https://github.com/ALEJOVJ/node.js-ALEJANDRO-FUENTES#readme"
 }
