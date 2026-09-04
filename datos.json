@@ -12,5 +12,12 @@
     "correo": "alejo15@misena.edu.co",
     "imagen": "/imagenes/mifoto.png",
     "clave": "123456"
+  },
+  {
+    "id": "2",
+    "nombre": "alejo",
+    "correo": "alejo@sena.edu.co",
+    "clave": "524626",
+    "imagen": "/misImagenes/1788551587789.jpg"
   }
 ]

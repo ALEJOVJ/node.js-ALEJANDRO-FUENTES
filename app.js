@@ -1,100 +1,186 @@
 const express = require('express');
 const app = express();
 require('dotenv').config();
-const port = 3000;
 
+const port = process.env.PUERTO || 3000;
 
-app.use(express.json())
-app.use(express.urlencoded({extended: true}))
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
+// Módulos
+const sistemaArchivo = require('fs');
+const path = require('path');
 
-//leer archivo
-const sistemaArchivo = require("fs");
-const ruta = require("path");
+// Archivo JSON
+const rutaArchivo = path.join(__dirname, 'datos.json');
 
-const rutaArchivo = ruta.join(__dirname, "datos.json");
+// Multer
+const multer = require('multer');
 
+// Carpeta para imágenes
+app.use('/misImagenes', express.static(path.join(__dirname, 'misImagenes')));
 
+// Configuración de almacenamiento
+const almacenamiento = multer.diskStorage({
 
-app.get("/", (req, res) => {
-res.send('Aprendicez ficha 3407186');
+    destination: (req, file, cb) => {
+        cb(null, 'misImagenes/');
+    },
+
+    filename: (req, file, cb) => {
+
+        // IMPORTANTE:
+        // extname pertenece a "path", NO a "file"
+        const extension = path.extname(file.originalname);
+
+        cb(null, `${Date.now()}${extension}`);
+    }
+
 });
 
+const cargar = multer({
+    storage: almacenamiento
+});
 
+// Página principal
+app.get('/', (req, res) => {
+    res.send('Aprendices ficha 3407186');
+});
 
-app.get("/api/aprendices", (req,res) => {
+// Listar aprendices
+app.get('/api/aprendices', (req, res) => {
 
-    sistemaArchivo.readFile(rutaArchivo, "utf-8", (error, datos) => {
-        if(error){
-            return res.status(500).json({Error: "no se puede leer el archivo"})
-        }
-        const listaAprendices = JSON.parse(datos)
-        res.status(200).json({"mensaje":listaAprendices})
-    })
-})
-
-app.get("/api/aprendices/:id", (req,res) => {
-    res.status(200).json({
-        'mensaje':'Listar aprendiz'
-    })
-})
- 
-app.post('/api/aprendices', (req, res) => {
-    const datosAprendiz = req.body;
-    
     sistemaArchivo.readFile(rutaArchivo, 'utf-8', (error, datos) => {
+
         if (error) {
-            return res.status(500).json({ Error: "No se puede leer el archivo" });
+            return res.status(500).json({
+                Error: 'No se puede leer datos.json'
+            });
         }
-        
+
         const listaAprendices = JSON.parse(datos);
+
+        res.status(200).json({
+            mensaje: listaAprendices
+        });
+    });
+});
+
+// Listar un aprendiz
+app.get('/api/aprendices/:id', (req, res) => {
+
+    res.status(200).json({
+        mensaje: 'Listar un aprendiz',
+        id: req.params.id
+    });
+
+});
+
+// Crear aprendiz
+app.post('/api/aprendices', cargar.single('imagen'), (req, res) => {
+
+    const datosAprendiz = req.body;
+
+    // Guardar ruta de imagen
+    datosAprendiz.imagen = req.file
+        ? `/misImagenes/${req.file.filename}`
+        : 'sin imagen';
+
+    sistemaArchivo.readFile(rutaArchivo, 'utf-8', (error, datos) => {
+
+        if (error) {
+            return res.status(500).json({
+                Error: 'No se puede leer datos.json'
+            });
+        }
+
+        const listaAprendices = JSON.parse(datos);
+
+        // Agregar aprendiz
         listaAprendices.push(datosAprendiz);
-        
-        sistemaArchivo.writeFile(rutaArchivo, JSON.stringify(listaAprendices, null, 2), (error) => {
-            if (error) {
-                return res.status(500).json({ Error: "No se puede escribir en el archivo" })
+
+        sistemaArchivo.writeFile(
+            rutaArchivo,
+            JSON.stringify(listaAprendices, null, 2),
+            (error) => {
+
+                if (error) {
+                    return res.status(500).json({
+                        Error: 'No se puede escribir datos.json'
+                    });
+                }
+
+                res.status(200).json({
+                    mensaje: 'Aprendiz creado',
+                    'Datos Aprendiz': datosAprendiz
+                });
+
             }
-            
-            return res.status(201).json({ 
-                mensaje: "Aprendiz creado", 
-                datos: datosAprendiz 
-            })
-        })
-    })
-})
+        );
 
-    
+    });
 
-app.put("/api/aprendices/:id", (req,res) => {
+});
+
+// Editar aprendiz
+app.put('/api/aprendices/:id', (req, res) => {
+
     res.status(200).json({
-        'mensaje':'editar aprendice'
-    })
-})
+        mensaje: 'Editar aprendiz',
+        id: req.params.id
+    });
 
-app.delete("/api/aprendices/:id", (req,res) => {
+});
+
+// Eliminar aprendiz
+app.delete('/api/aprendices/:id', (req, res) => {
+
     res.status(200).json({
-        'mensaje':'eliminar aprendices'
-    })
-})
+        mensaje: 'Eliminar aprendiz',
+        id: req.params.id
+    });
 
-app.post("/rutajson", (req,res) => {
-    const todosDatos = req.body
-    const edad = todosDatos.edad
-    if (edad >= 18) {res.json({mensaje:"es mayor"})
-    }else {
-        res.json({mensaje:"es menor"})
+});
+
+// Recibir JSON
+app.post('/rutaJson', (req, res) => {
+
+    const todosDatos = req.body;
+    const edad = req.body.Edad;
+
+    if (edad >= 18) {
+
+        return res.json({
+            mensaje: 'Es mayor de edad',
+            datosJson: todosDatos
+        });
+
+    } else {
+
+        return res.json({
+            mensaje: 'Es menor de edad',
+            datosJson: todosDatos
+        });
+
     }
-        
-})
 
-app.post("/rutaFormulario", (req,res) => {
-    const formulario = req.body
-    const programa = req.body.programa
+});
 
-    res.json({formulario: formulario, My_programa: programa})
-        
-})
+// Recibir formularios
+app.post('/rutaFormularios', (req, res) => {
 
+    const todosDatos = req.body;
+    const programa = req.body.programa;
+
+    res.json({
+        Todosdatos: todosDatos,
+        Mi_Programa: programa
+    });
+
+});
+
+// Iniciar servidor
 app.listen(port, () => {
-console.log( `SERVIDOR: http://localhost:${port}`);
+    console.log(`Servidor: http://localhost:${port}`);
 });
