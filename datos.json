@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "nombre": "Alejandro Fuentes",
+    "correo": "alejo15@misena.edu.co",
+    "imagen": "/imagenes/mifoto.png",
+    "clave": "123456"
+  },
+  {
+    "id": 1,
+    "nombre": "Alejandro ",
+    "correo": "alejo15@misena.edu.co",
+    "imagen": "/imagenes/mifoto.png",
+    "clave": "123456"
+  }
+]

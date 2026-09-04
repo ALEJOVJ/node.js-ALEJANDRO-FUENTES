@@ -7,6 +7,15 @@ const port = 3000;
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
+
+//leer archivo
+const sistemaArchivo = require("fs");
+const ruta = require("path");
+
+const rutaArchivo = ruta.join(__dirname, "datos.json");
+
+
+
 app.get("/", (req, res) => {
 res.send('Aprendicez ficha 3407186');
 });
@@ -14,26 +23,51 @@ res.send('Aprendicez ficha 3407186');
 
 
 app.get("/api/aprendices", (req,res) => {
-    res.json(200)({
-        'mensaje':'Listado de aprendices'
+
+    sistemaArchivo.readFile(rutaArchivo, "utf-8", (error, datos) => {
+        if(error){
+            return res.status(500).json({Error: "no se puede leer el archivo"})
+        }
+        const listaAprendices = JSON.parse(datos)
+        res.status(200).json({"mensaje":listaAprendices})
     })
 })
 
 app.get("/api/aprendices/:id", (req,res) => {
-    res.json(200)({
+    res.status(200).json({
         'mensaje':'Listar aprendiz'
     })
 })
  
-app.post("/api/aprendices", (req,res) => {
-    res.status(201).json({
-        'mensaje':'crear aprendices'
+app.post('/api/aprendices', (req, res) => {
+    const datosAprendiz = req.body;
+    
+    sistemaArchivo.readFile(rutaArchivo, 'utf-8', (error, datos) => {
+        if (error) {
+            return res.status(500).json({ Error: "No se puede leer el archivo" });
+        }
+        
+        const listaAprendices = JSON.parse(datos);
+        listaAprendices.push(datosAprendiz);
+        
+        sistemaArchivo.writeFile(rutaArchivo, JSON.stringify(listaAprendices, null, 2), (error) => {
+            if (error) {
+                return res.status(500).json({ Error: "No se puede escribir en el archivo" })
+            }
+            
+            return res.status(201).json({ 
+                mensaje: "Aprendiz creado", 
+                datos: datosAprendiz 
+            })
+        })
     })
 })
 
+    
+
 app.put("/api/aprendices/:id", (req,res) => {
     res.status(200).json({
-        'mensaje':'editar aprendices'
+        'mensaje':'editar aprendice'
     })
 })
 
