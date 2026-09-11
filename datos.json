@@ -19,5 +19,17 @@
     "correo": "alejo@sena.edu.co",
     "clave": "524626",
     "imagen": "/misImagenes/1788551587789.jpg"
+  },
+  {
+    "nombre": "alejo",
+    "edad": 18,
+    "correo": "alejo1234@gmail.com",
+    "imagen": "sin imagen"
+  },
+  {
+    "nombre": "alejo",
+    "edad": 18,
+    "correo": "alejo1234@gmail.com",
+    "imagen": "sin imagen"
   }
 ]

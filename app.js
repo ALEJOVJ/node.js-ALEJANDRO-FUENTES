@@ -7,6 +7,14 @@ const port = process.env.PUERTO || 3000;
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+//middleware propios 
+//este middleware se ejecuta siempre que se haga una peticion (get post put patch delete)
+app.use((req, res, next)=>{
+    console.log(`Tiempo milisegundos: ${Date.now()}`)
+    console.log(`Fecha: ${new Date().toISOString}`)
+    next()
+})
+
 
 // Módulos
 const sistemaArchivo = require('fs');
@@ -79,7 +87,7 @@ app.get('/api/aprendices/:id', (req, res) => {
 
 // Crear aprendiz
 app.post('/api/aprendices', cargar.single('imagen'), (req, res) => {
-
+    //validar que se envien datos 
     const datosAprendiz = req.body;
 
     // Guardar ruta de imagen
