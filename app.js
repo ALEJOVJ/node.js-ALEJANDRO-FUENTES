@@ -2,8 +2,10 @@ const express = require('express');
 const app = express();
 require('dotenv').config();
 
-const port = process.env.PUERTO || 3000;
 
+const port = process.env.PUERTO || 3000;
+const registromiddleware = require("./middleware/registromiddleware")
+const manejadorErrores = require("./middleware/manejadorErrores")
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -11,9 +13,11 @@ app.use(express.urlencoded({ extended: true }));
 //este middleware se ejecuta siempre que se haga una peticion (get post put patch delete)
 app.use((req, res, next)=>{
     console.log(`Tiempo milisegundos: ${Date.now()}`)
-    console.log(`Fecha: ${new Date().toISOString}`)
+    console.log(`Fecha: ${new Date().toISOString()}`)
     next()
 })
+
+app.use(registromiddleware)
 
 
 // Módulos
@@ -151,6 +155,17 @@ app.delete('/api/aprendices/:id', (req, res) => {
 
 });
 
+//error provocado
+app.get("/error",(req, res, next)=>{
+    next(new Error("Error intencional de mi app"))
+})
+
+//ruta protegida
+
+app.get("/api/rutaprotegida",(req,res)=>{
+    res.status(200).json({mensaje: "esta es mi ruta protegida !!!"})
+})
+
 // Recibir JSON
 app.post('/rutaJson', (req, res) => {
 
@@ -188,7 +203,10 @@ app.post('/rutaFormularios', (req, res) => {
 
 });
 
+app.use(manejadorErrores)
+
 // Iniciar servidor
 app.listen(port, () => {
     console.log(`Servidor: http://localhost:${port}`);
 });
+
