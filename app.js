@@ -4,9 +4,9 @@ require('dotenv').config();
 
 
 const port = process.env.PUERTO || 3000;
-const registromiddleware = require("./middleware/registromiddleware")
-const manejadorErrores = require("./middleware/manejadorErrores")
-const autenticacion = require("./middleware/autenticacion")
+const registromiddleware = require("./src/middleware/registromiddleware")
+const manejadorErrores = require("./src/middleware/manejadorErrores")
+const autenticacion = require("./src/middleware/autenticacion")
 const jwt = require("jsonwebtoken")
 
 // Middleware
