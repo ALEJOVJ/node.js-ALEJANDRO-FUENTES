@@ -9,4 +9,6 @@ const usuariosRouter = require("./usuariosRouter")
 enrutador.use("/mirutaPrueba", pruebaRouter)
 enrutador.use("/usuarios", usuariosRouter)
 
+
+
 module.exports = enrutador

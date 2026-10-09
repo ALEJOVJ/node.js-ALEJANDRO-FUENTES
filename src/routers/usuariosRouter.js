@@ -2,12 +2,16 @@
 
 const {Router} = require("express")
 const enrutador = Router()
+const {mostrarUsuarios , registrarcontroller, logincontroller} = require ('../controllers/listarUsuariosController')
 
 
 
-enrutador.get("/rutaPersonal2", (req,res)=>{
-    res.json({mensaje: "es mi rutausuarios y rutaPersonal2"})
-})
+
+
+
+enrutador.get("/listado", mostrarUsuarios)
+enrutador.get("/registrar", registrarcontroller)
+enrutador.post("/login", logincontroller)
 
 
 module.exports = enrutador
