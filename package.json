@@ -12,7 +12,7 @@
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "dotenv": "^17.4.2",
-    "express": "^5.2.1",
+    "express": "^5.3.0",
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.3.0"
   },
@@ -25,8 +25,9 @@
   },
   "homepage": "https://github.com/ALEJOVJ/node.js-ALEJANDRO-FUENTES#readme",
   "devDependencies": {
-    "@prisma/adapter-pg": "^7.10.0",
-    "@prisma/client": "^7.10.0",
+    "@prisma/adapter-pg": "^7.10.1",
+    "@prisma/client": "^7.10.1",
+    "@types/node": "^26.6.5",
     "prisma": "^7.10.0",
     "tsx": "^4.23.15"
   }
