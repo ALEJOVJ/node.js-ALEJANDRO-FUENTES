@@ -1,17 +1,24 @@
-//ruta de solo usuarios
-
-const {Router} = require("express")
+//Ruta de solo prueba
+const { Router } = require('express')
 const enrutador = Router()
-const {mostrarUsuarios , registrarcontroller, logincontroller} = require ('../controllers/listarUsuariosController')
+const { mostrarUsuarios, registrarController, loginController, listUserIdController, editarController, eliminarController } = require('../controllers/listarUsuariosController')
 
-
-
-
-
-
+//Funcion (req, res) debe ir en el controlador
 enrutador.get("/listado", mostrarUsuarios)
-enrutador.get("/registrar", registrarcontroller)
-enrutador.post("/login", logincontroller)
 
+//Ruta pra listar por ID
+enrutador.get("/listadoID/:id", listUserIdController)
+
+//Ruta para registrarse
+enrutador.post("/registrar", registrarController)
+
+//Ruta para editar 
+enrutador.put("/editar/:id", editarController)
+
+//Ruta para eliminar
+enrutador.delete("/eliminar/:id", eliminarController)
+
+//Ruta para iniciar sesion
+enrutador.get("/login", loginController)
 
 module.exports = enrutador
